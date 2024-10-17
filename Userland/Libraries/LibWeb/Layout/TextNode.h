@@ -44,6 +44,7 @@ public:
 
         Optional<Chunk> next();
         Optional<Chunk> peek(size_t);
+        Chunk create_empty_chunk();
 
     private:
         Optional<Chunk> next_without_peek();

@@ -577,6 +577,19 @@ Optional<TextNode::Chunk> TextNode::ChunkIterator::try_commit_chunk(size_t start
     return {};
 }
 
+TextNode::Chunk TextNode::ChunkIterator::create_empty_chunk()
+{
+    return TextNode::Chunk {
+        .view = {},
+        .font = m_font_cascade_list.first(),
+        .start = 0,
+        .length = 0,
+        .has_breaking_newline = false,
+        .is_all_whitespace = true,
+        .text_type = Gfx::GlyphRun::TextType::Common,
+    };
+}
+
 JS::GCPtr<Painting::Paintable> TextNode::create_paintable() const
 {
     return Painting::TextPaintable::create(*this, text_for_rendering());

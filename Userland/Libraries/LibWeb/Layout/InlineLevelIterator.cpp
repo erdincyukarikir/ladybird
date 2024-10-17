@@ -213,9 +213,13 @@ Optional<InlineLevelIterator::Item> InlineLevelIterator::next_without_lookahead(
 
         auto chunk_opt = m_text_node_context->chunk_iterator.next();
         if (!chunk_opt.has_value()) {
-            m_text_node_context = {};
-            skip_to_next();
-            return next_without_lookahead();
+            if (!m_text_node_context->is_last_chunk && text_node.dom_node().is_editable() && text_node.text_for_rendering().byte_count() == 0U) {
+                chunk_opt = m_text_node_context->chunk_iterator.create_empty_chunk();
+            } else {
+                m_text_node_context = {};
+                skip_to_next();
+                return next_without_lookahead();
+            }
         }
 
         if (!m_text_node_context->chunk_iterator.peek(0).has_value())
